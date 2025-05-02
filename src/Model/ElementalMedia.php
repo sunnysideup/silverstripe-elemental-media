@@ -50,16 +50,18 @@ class ElementalMedia extends BaseElement
 
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        $this->beforeUpdateCMSFields(function ($fields) {
 
-        $fields->removeByName('VideoEmbedURL');
-        $fields->removeByName('VideoType');
-        $fields->removeByName('VideoRatio');
+            $fields->removeByName('VideoEmbedURL');
+            $fields->removeByName('VideoType');
+            $fields->removeByName('VideoRatio');
 
-        $fields->addFieldToTab('Root.Main', $mediaField = new MediaField($fields, 'MediaType', 'MediaImage', 'Video', 'MediaBlocks'));
-        $mediaField->getVideoWrapper()->push(DropdownField::create('VideoRatio', 'Video ratio', self::$video_ratios)->setEmptyString('16x9 (Default)'));
+            $fields->addFieldToTab('Root.Main', $mediaField = new MediaField($fields, 'MediaType', 'MediaImage', 'Video', 'MediaBlocks'));
+            $mediaField->getVideoWrapper()->push(DropdownField::create('VideoRatio', 'Video ratio', self::$video_ratios)->setEmptyString('16x9 (Default)'));
 
-        return $fields;
+        });
+
+        return parent::getCMSFields();
     }
 
     public function onBeforeWrite()
